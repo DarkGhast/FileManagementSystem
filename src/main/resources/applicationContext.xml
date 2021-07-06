@@ -1,0 +1,70 @@
+<beans xmlns= "http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd ">
+    <!--这里可以去掉，因为下面自动扫描包的代码，就包含了该行的功能-->
+<!--    <context:annotation-config/>-->
+    <!-- 自动扫描web包 ,将带有注解的类 纳入spring容器管理 -->
+    <context:component-scan base-package="org.darkghast.fms"/>
+    <!--配置信息-->
+    <bean id="urlUtils" class="org.darkghast.fms.utils.UrlUtils">
+        <!--网址前缀-->
+        <property name="DOMAIN" value="http://localhost:8080/FileManagementSystem/"/>
+    </bean>
+    <bean id="savedFileUtils" class="org.darkghast.fms.utils.SavedFileUtils">
+        <!--下载根目录-->
+        <property name="rootPath" value="D:\文件\临时文件夹\实训"/>
+    </bean>
+
+    <!--Spring与Mybatis整合-->
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/shixun?seUnicode=true&amp;characterEncoding=utf-8" />
+        <property name="username" value="testAdmin" />
+        <property name="password" value="1234" />
+        <!-- 最大连接数 -->
+        <property name="maxTotal" value="30"/>
+        <!-- 最大空闲连接数 -->
+        <property name="maxIdle" value="10"/>
+        <!-- 初始化连接数 -->
+        <property name="initialSize" value="5"/>
+    </bean>
+    <!-- 配置SqlSessionFactoryBean -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 引用数据源组件 -->
+        <property name="dataSource" ref="dataSource" />
+        <!-- 引用MyBatis配置文件中的配置 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+    </bean>
+    <!-- Mapper代理开发，使用Spring自动扫描MyBatis的接口并装配 （Sprinh将指定包中的所有被@Mapper注解标注的接口自动装配为MyBatis的映射接口） -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- mybatis-spring组件的扫描器，com.dao只需要接口（接口方法与SQL映射文件中的相同） -->
+        <property name="basePackage" value="org.darkghast.fms.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+
+    <bean id="userService" class="org.darkghast.fms.service.impl.UserServiceImpl"/>
+    <bean id="savedFileService" class="org.darkghast.fms.service.impl.SavedFileServiceImpl"/>
+    <bean id="userAction" class="org.darkghast.fms.action.UserAction">
+        <property name="userService" ref="userService"/>
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="userLoginAction" class="org.darkghast.fms.action.UserLoginAction">
+        <property name="userService" ref="userService"/>
+    </bean>
+    <bean id="savedFileAction" class="org.darkghast.fms.action.SavedFileAction">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="uploadAction" class="org.darkghast.fms.action.UploadAction">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="downloadAction" class="org.darkghast.fms.action.DownLoadAction">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+</beans>

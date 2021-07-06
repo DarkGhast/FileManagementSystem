@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <constant name="struts.objectFactory" value="spring"/>
+    <!--指定国际化资源文件（下一章会讲到）-->
+    <constant name="struts.custom.i18n.resources" value="messageResource"/>
+    <!--设置Struts应用的解码集  指定Web应用的默认编码集,相当于调用HttpServletRequest的setCharacterEncoding方法 -->
+    <constant name="struts.i18n.encoding" value="utf-8"/>
+    <!-- 上传文件的总大小(可能上传多个)该属性指定Struts 2文件上传中整个请求内容允许的最大字节数
+    	而拦截器中配置的是限制单个上传文件的大小-->
+    <constant name="struts.multipart.maxSize" value="1000000000"/>
+
+    <!--测试包-->
+    <package namespace="/test" name="testJSON" extends="struts-default,json-default">
+        <action name="testJson" class="com.example.action.TestJsonAction" method="testJson">
+            <result name="success" type="json">
+                <param name="root">userList</param>
+            </result>
+        </action>
+    </package>
+
+    <!--登录状态部分-->
+    <package namespace="/Login" name="Login" extends="struts-default,json-default">
+        <action name="login" class="org.darkghast.fms.action.UserLoginAction" method="login"/>
+        <action name="getMyName" class="org.darkghast.fms.action.UserLoginAction" method="getMyName"/>
+        <!--注销用户-->
+        <action name="logout" class="org.darkghast.fms.action.UserLoginAction" method="logout"/>
+    </package>
+
+    <!--用户管理部分-->
+    <package namespace="/UserManagement" name="UserManagement" extends="struts-default,json-default">
+
+        <action name="queryAll" class="org.darkghast.fms.action.UserAction" method="queryAll">
+            <result name="success" type="json">
+                <param name="root">userList</param>
+            </result>
+        </action>
+        <action name="queryByPage" class="org.darkghast.fms.action.UserAction" method="queryByPage">
+            <result name="success" type="json">
+                <param name="data">userList</param>
+            </result>
+        </action>
+        <action name="queryByPageForCondition" class="org.darkghast.fms.action.UserAction" method="queryByPageForCondition">
+            <result name="success" type="json">
+                <param name="count">count</param>
+                <param name="data">userList</param>
+            </result>
+        </action>
+        <action name="delete" class="org.darkghast.fms.action.UserAction" method="delete"/>
+        <action name="forceDelete" class="org.darkghast.fms.action.UserAction" method="forceDelete"/>
+        <action name="insertUser" class="org.darkghast.fms.action.UserAction" method="insertUser"/>
+        <action name="updateUser" class="org.darkghast.fms.action.UserAction" method="updateUser"/>
+    </package>
+
+    <!--文件管理部分-->
+    <package namespace="/FileManagement" name="FileManagement" extends="struts-default,json-default">
+        <action name="queryAll" class="org.darkghast.fms.action.SavedFileAction" method="queryAll">
+            <result name="success" type="json">
+                <param name="root">savedFileList</param>
+            </result>
+        </action>
+        <action name="queryByPage" class="org.darkghast.fms.action.SavedFileAction" method="queryByPage">
+            <result name="success" type="json">
+                <param name="count">count</param>
+                <param name="data">savedFileList</param>
+            </result>
+        </action>
+        <action name="queryByPageForCondition" class="org.darkghast.fms.action.SavedFileAction" method="queryByPageForCondition">
+            <result name="success" type="json">
+                <param name="count">count</param>
+                <param name="data">savedFileList</param>
+            </result>
+        </action>
+        <action name="delete" class="org.darkghast.fms.action.SavedFileAction" method="delete"/>
+        <action name="update" class="org.darkghast.fms.action.SavedFileAction" method="update"/>
+        <!--上传文件-->
+        <action name="saveFile" class="org.darkghast.fms.action.UploadAction" method="saveFile">
+            <result name="success" type="json">
+                <param name="root">errorList</param>
+            </result>
+        </action>
+        <!-- 下载功能 -->
+        <action name="downLoad" class="org.darkghast.fms.action.DownLoadAction" method="downloadFile">
+            <result name="success" type="stream">
+                <!-- 指定文件类型 -->
+                <param name="contentType">${contentType}</param>
+                <!--默认就是inputStream,它将会指示StreamResult通过inputName属性值的getter和setter方法，
+                    如这里就是getInputStream()来获取下载文件的内容,意味着Action要有这个方法-->
+                <param name="inputName">inputStream</param>
+                <!--默认为inline（在线打开）,设置为attachment将会告诉浏览器下载该文件,
+                    filename指定下载文件时的文件名，若未指定将会以浏览器页面名作为文件名,如：以download.action作为文件名-->
+                <param name="contentDisposition">attachment;filename=${filename}</param>
+                <!--指定下载文件的缓冲大小-->
+                <param name="bufferSize">4096</param>
+            </result>
+        </action>
+    </package>
+
+    <package namespace="/" name="default" extends="struts-default,json-default">
+
+    </package>
+
+</struts>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.darkghast.fms.dao.SavedFileMapper">
+    <!--    定义映射规则-->
+    <resultMap id="uploadFileSimpleMap" type="org.darkghast.fms.entity.SavedFile">
+        <!--    主键映射-->
+        <id property="id" column="id"/>
+        <!--    属性映射-->
+        <result property="realFileName" column="realFileName"/>
+        <result property="uploadTime" column="uploadTime"/>
+        <result property="path" column="path"/>
+        <result property="savedFileName" column="savedFileName"/>
+        <result property="identifier" column="identifier"/>
+        <association property="uploader" javaType="org.darkghast.fms.entity.User">
+            <id property="id" column="uploaderId"/>
+            <id property="username" column="username"/>
+        </association>
+    </resultMap>
+
+
+    <select id="query" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploaderId`, `uploadTime`, `path`, `savedFileName`,`identifier`, u.username
+        FROM `t_file` AS f
+                     JOIN `t_user` AS u
+                ON u.id = f.uploaderId
+        WHERE f.id = #{id}
+    </select>
+
+
+    <select id="queryAll" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploadTime`, u.username
+        FROM `t_file` AS f
+                     JOIN `t_user` AS u
+                ON u.id = f.uploaderId
+    </select>
+
+    <select id="getCount" resultType="java.lang.Long">
+        SELECT count(f.id)
+        FROM `t_file` AS f
+                     JOIN `t_user` AS u
+                ON u.id = f.uploaderId
+    </select>
+
+    <select id="queryAllByPage" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploadTime`, u.username
+        FROM `t_file` AS f
+                JOIN `t_user` AS u
+                ON u.id = f.uploaderId
+                LIMIT #{offset}, #{rowCount}
+    </select>
+
+    <select id="queryAllByIdentifier" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploaderId`, `uploadTime`, `path`, `savedFileName`,`identifier`, u.username
+        FROM `t_file` AS f
+        JOIN `t_user` AS u
+        ON u.id = f.uploaderId
+        WHERE f.identifier = #{identifier}
+    </select>
+
+    <select id="queryAllByUploaderId" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploaderId`, `uploadTime`, `path`, `savedFileName`,`identifier`, u.username
+        FROM `t_file` AS f
+        JOIN `t_user` AS u
+        ON u.id = f.uploaderId
+        WHERE f.uploaderId = #{uploaderId}
+    </select>
+
+    <select id="queryByPageForCondition" resultMap="uploadFileSimpleMap">
+        SELECT f.id, `realFileName`, `uploaderId`, `uploadTime`, `path`, `savedFileName`,`identifier`, u.username
+        FROM `t_file` AS f
+        JOIN `t_user` AS u
+        ON u.id = f.uploaderId
+        WHERE true
+        <if test="savedFile.id != null and savedFile.id!=''">
+            AND f.id = #{savedFile.id}
+        </if>
+        <if test="savedFile.realFileName != null and savedFile.realFileName!=''">
+            AND f.realFileName like #{savedFile.realFileName}
+        </if>
+        <if test="savedFile.uploader.id != null and savedFile.uploader.id!=''">
+            AND u.id = #{savedFile.uploader.id}
+        </if>
+        <if test="savedFile.uploader.username != null and savedFile.uploader.username!=''">
+            AND u.username like #{savedFile.uploader.username}
+        </if>
+        LIMIT #{offset}, #{rowCount}
+    </select>
+
+
+    <select id="getCountForCondition" resultType="java.lang.Long">
+        SELECT count(f.id)
+        FROM `t_file` AS f
+        JOIN `t_user` AS u
+        ON u.id = f.uploaderId
+        WHERE true
+        <if test="savedFile.id != null and savedFile.id!=''">
+            AND f.id = #{savedFile.id}
+        </if>
+        <if test="savedFile.realFileName != null and savedFile.realFileName!=''">
+            AND f.realFileName like #{savedFile.realFileName}
+        </if>
+        <if test="savedFile.uploader.id != null and savedFile.uploader.id!=''">
+            AND u.id = #{savedFile.uploader.id}
+        </if>
+        <if test="savedFile.uploader.username != null and savedFile.uploader.username!=''">
+            AND u.username like #{savedFile.uploader.username}
+        </if>
+    </select>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        INSERT
+        INTO `t_file` (`realFileName`, `uploaderId`, `uploadTime`, `path`, `savedFileName`,`identifier`)
+        VALUES (#{file.realFileName}, #{file.uploader.id}, #{file.uploadTime}, #{file.path},
+        #{file.savedFileName},#{file.identifier})
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM `t_file`
+        WHERE id = #{Id}
+    </delete>
+
+    <update id="update">
+        UPDATE `t_file`
+        SET `realFileName`=#{file.realFileName}
+        WHERE id = #{file.id}
+    </update>
+</mapper>
