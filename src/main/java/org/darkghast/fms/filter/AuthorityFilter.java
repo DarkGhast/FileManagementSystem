@@ -1,7 +1,6 @@
 package org.darkghast.fms.filter;
 
 import org.darkghast.fms.entity.User;
-import org.darkghast.fms.utils.UrlUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -36,7 +35,7 @@ public class AuthorityFilter extends HttpFilter {
             chain.doFilter(request, response);
         } else {
             //没有登录
-            httpServletResponse.sendRedirect(UrlUtils.getDOMAIN() + "./login.html");
+            httpServletResponse.sendRedirect("../login.html");
         }
     }
 

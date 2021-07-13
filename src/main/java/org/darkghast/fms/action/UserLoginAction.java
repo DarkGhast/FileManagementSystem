@@ -6,7 +6,6 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.darkghast.fms.entity.User;
 import org.darkghast.fms.service.UserService;
-import org.darkghast.fms.utils.UrlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,7 @@ public class UserLoginAction extends ActionSupport implements ModelDriven<User> 
         User login = userService.login(new User(null, user.getEmail(), null, user.getPassword()));
         if (login == null) {
             //如果查询结果为null（查询不到）说明登录失败
-            response.sendRedirect(UrlUtils.getDOMAIN() + "./error.html");
+            response.sendRedirect("../error.html");
         } else {
             //如果查询结果不为null（查询到）则登陆成功
             //1.把登录的用户信息保存到Session对象中
@@ -41,7 +40,7 @@ public class UserLoginAction extends ActionSupport implements ModelDriven<User> 
             //把userId保存的Session对象中，以便后端获取
             request.getSession().setAttribute("userId", login.getId());
             //2.跳转到首页
-            response.sendRedirect(UrlUtils.getDOMAIN() + "./user/FileManagement.html");
+            response.sendRedirect("../user/FileManagement.html");
         }
     }
 
@@ -54,7 +53,7 @@ public class UserLoginAction extends ActionSupport implements ModelDriven<User> 
         //1.销毁保存有用户信息的session对象
         request.getSession().invalidate();
         //2.跳转回首页
-        response.sendRedirect(UrlUtils.getDOMAIN() + "./index.html");
+        response.sendRedirect("../index.html");
     }
 
 

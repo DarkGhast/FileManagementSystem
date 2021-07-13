@@ -1,10 +1,8 @@
 package org.darkghast.fms.action;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ModelDriven;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.json.annotations.JSON;
 import org.darkghast.fms.entity.SavedFile;
 import org.darkghast.fms.entity.User;
 import org.darkghast.fms.service.FileDeleteService;
@@ -12,11 +10,9 @@ import org.darkghast.fms.service.SavedFileService;
 import org.darkghast.fms.service.UserService;
 import org.darkghast.fms.service.impl.FileDeleteServiceImpl;
 import org.darkghast.fms.utils.PageQueryUtil;
-import org.darkghast.fms.utils.UrlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

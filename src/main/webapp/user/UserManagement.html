@@ -294,8 +294,6 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.10/assets/js/ie10-viewport-bug-workaround.js"></script>
 <script type="text/javascript">
-    <!--域名设置-->
-    const DOMAIN = "localhost:8080";
     let pageNo = 1;
     let queryID = null;
     let queryUsername = null;
@@ -304,7 +302,7 @@
 
     function getMyName() {
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/Login/getMyName",
+            url: "../Login/getMyName",
             data: {},
             type: "GET",
             dataType: "text",
@@ -312,7 +310,7 @@
             success: function (data) {
                 if (data == null) {
                     $.ajax({
-                        url: "http://" + DOMAIN + "/FileManagementSystem/Login/logout",
+                        url: "../Login/logout",
                         data: {},
                         type: "GET",
                         dataType: "text"
@@ -362,7 +360,7 @@
             var flag = confirm('是否确认删除ID为' + id + '的用户?');
             if (flag) {
                 $.ajax({
-                    url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/delete",
+                    url: "../UserManagement/delete",
                     data: {id: id},
                     type: "GET",
                     dataType: "text",
@@ -377,7 +375,7 @@
                                 const deleteFlag = confirm('"用户仍有文件在数据库中",是否确认删除ID为' + id + '的用户?');
                                 if (deleteFlag) {
                                     $.ajax({
-                                        url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/forceDelete",
+                                        url: "../UserManagement/forceDelete",
                                         data: {id: id},
                                         type: "GET",
                                         dataType: "text",
@@ -421,7 +419,7 @@
         }
         //调用jQuery的ajax方法
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/queryByPage",
+            url: "../UserManagement/queryByPage",
             data: {pageNo: pageNo},
             type: "GET",
             dataType: "text",
@@ -441,7 +439,7 @@
             $("#lastpage")[0].style.display = 'block';
         }
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/queryByPageForCondition",
+            url: "../UserManagement/queryByPageForCondition",
             data: {
                 id: queryID,
                 email: queryEmail,
@@ -522,7 +520,7 @@
                 return false;
             }
             $.ajax({
-                url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/insertUser",
+                url: "../UserManagement/insertUser",
                 data: {email: userEmailText, username: usernameText, password: passwordText},
                 type: "GET",
                 dataType: "text",
@@ -566,7 +564,7 @@
                 return;
             }
             $.ajax({
-                url: "http://" + DOMAIN + "/FileManagementSystem/UserManagement/updateUser",
+                url: "../UserManagement/updateUser",
                 data: {id: idText, email: emailText, username: usernameText, password: passwordText},
                 type: "GET",
                 dataType: "text",

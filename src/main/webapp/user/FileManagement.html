@@ -280,8 +280,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.10/assets/js/ie10-viewport-bug-workaround.js"></script>
 <!--页面加载时获取列表-->
 <script type="text/javascript">
-    <!--域名设置-->
-    const DOMAIN = "localhost:8080";
     let pageNo = 1;
     let queryFileID = null;
     let queryFilename = null;
@@ -291,7 +289,7 @@
 
     function getMyName() {
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/Login/getMyName",
+            url: "../Login/getMyName",
             data: {},
             type: "GET",
             dataType: "text",
@@ -299,7 +297,7 @@
             success: function (data) {
                 if (data == null) {
                     $.ajax({
-                        url: "http://" + DOMAIN + "/FileManagementSystem/Login/logout",
+                        url: "../Login/logout",
                         data: {},
                         type: "GET",
                         dataType: "text"
@@ -350,7 +348,7 @@
             var flag = confirm('是否确认删除ID为' + id + '的文件?（文件名为：《' + filename + "》）");
             if (flag) {
                 $.ajax({
-                    url: "http://" + DOMAIN + "/FileManagementSystem/FileManagement/delete",
+                    url: "../FileManagement/delete",
                     data: {id: id},
                     type: "GET",
                     dataType: "text",
@@ -367,7 +365,7 @@
         });
         $('.download-file').bind('click', function () {
             var idText = $(this).parents('tr').children('td')[0].innerHTML;
-            window.location.href = "http://" + DOMAIN + "/FileManagementSystem/FileManagement/downLoad?id=" + idText;
+            window.location.href = "../FileManagement/downLoad?id=" + idText;
         })
     }
 
@@ -379,7 +377,7 @@
         }
         //调用jQuery的ajax方法
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/FileManagement/queryByPage",
+            url: "../FileManagement/queryByPage",
             data: {pageNo: pageNo},
             type: "GET",
             dataType: "text",
@@ -399,7 +397,7 @@
             $("#lastpage")[0].style.display = 'block';
         }
         $.ajax({
-            url: "http://" + DOMAIN + "/FileManagementSystem/FileManagement/queryByPageForCondition",
+            url: "../FileManagement/queryByPageForCondition",
             data: {
                 id: queryFileID,
                 filename: queryFilename,
@@ -465,7 +463,7 @@
                 return;
             }
             $.ajax({
-                url: "http://" + DOMAIN + "/FileManagementSystem/FileManagement/update",
+                url: "../FileManagement/update",
                 data: {id: idText, realname: filenameText},
                 type: "GET",
                 dataType: "text",

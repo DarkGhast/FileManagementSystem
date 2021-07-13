@@ -9,10 +9,6 @@
     <!-- 自动扫描web包 ,将带有注解的类 纳入spring容器管理 -->
     <context:component-scan base-package="org.darkghast.fms"/>
     <!--配置信息-->
-    <bean id="urlUtils" class="org.darkghast.fms.utils.UrlUtils">
-        <!--网址前缀-->
-        <property name="DOMAIN" value="http://localhost:8080/FileManagementSystem/"/>
-    </bean>
     <bean id="savedFileUtils" class="org.darkghast.fms.utils.SavedFileUtils">
         <!--下载根目录-->
         <property name="rootPath" value="D:\文件\临时文件夹\实训"/>
