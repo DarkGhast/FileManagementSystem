@@ -332,9 +332,9 @@
                 .append('<td style="max-width: 350px">' + savedFileList[i].realFileName + '</td>')
                 .append('<td style="max-width: 150px">' + savedFileList[i].uploader.username + '</td>')
                 .append('<td style="max-width: 200px">' + savedFileList[i].uploadTime + '</td>')
-                .append('<td><button class="btn btn-info download-file" style="margin-right: 40px;">下载</button>' +
+                .append('<td><div style="display: inline-block"><button class="btn btn-info download-file" style="margin-right: 40px;">下载</button>' +
                     '<button class="btn btn-primary to-update-file"  data-toggle="modal" data-target="#updateFileModal">修改</button> ' +
-                    '<button class="btn btn-danger delete-file">删除</button></td>');
+                    '<button class="btn btn-danger delete-file">删除</button></div></td>');
             $('#tbd').append($fileElement);
         }
         $('.to-update-file').bind('click', function () {
@@ -355,7 +355,7 @@
                     type: "GET",
                     dataType: "text",
                     success: function (data) {
-                        if (data === 1) {
+                        if (data === "1") {
                             alert("删除成功");
                             location.reload();
                         } else {

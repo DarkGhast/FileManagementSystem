@@ -1,11 +1,9 @@
-<beans xmlns= "http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd ">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <!--这里可以去掉，因为下面自动扫描包的代码，就包含了该行的功能-->
 <!--    <context:annotation-config/>-->
     <!-- 自动扫描web包 ,将带有注解的类 纳入spring容器管理 -->
@@ -48,23 +46,22 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
-
-    <bean id="userService" class="org.darkghast.fms.service.impl.UserServiceImpl"/>
     <bean id="savedFileService" class="org.darkghast.fms.service.impl.SavedFileServiceImpl"/>
-    <bean id="userAction" class="org.darkghast.fms.action.UserAction">
+    <bean id="userService" class="org.darkghast.fms.service.impl.UserServiceImpl"/>
+    <bean id="downloadAction" class="org.darkghast.fms.action.DownLoadAction" scope="prototype">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="savedFileAction" class="org.darkghast.fms.action.SavedFileAction" scope="prototype">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="uploadAction" class="org.darkghast.fms.action.UploadAction" scope="prototype">
+        <property name="savedFileService" ref="savedFileService"/>
+    </bean>
+    <bean id="userAction" class="org.darkghast.fms.action.UserAction" scope="prototype">
         <property name="userService" ref="userService"/>
         <property name="savedFileService" ref="savedFileService"/>
     </bean>
-    <bean id="userLoginAction" class="org.darkghast.fms.action.UserLoginAction">
+    <bean id="userLoginAction" class="org.darkghast.fms.action.UserLoginAction" scope="prototype">
         <property name="userService" ref="userService"/>
-    </bean>
-    <bean id="savedFileAction" class="org.darkghast.fms.action.SavedFileAction">
-        <property name="savedFileService" ref="savedFileService"/>
-    </bean>
-    <bean id="uploadAction" class="org.darkghast.fms.action.UploadAction">
-        <property name="savedFileService" ref="savedFileService"/>
-    </bean>
-    <bean id="downloadAction" class="org.darkghast.fms.action.DownLoadAction">
-        <property name="savedFileService" ref="savedFileService"/>
     </bean>
 </beans>
