@@ -13,7 +13,7 @@
 
 ###  后端
 
-1. 使用Struts进行Action的管理
+1. 使用Spring MVC进行Controller的管理
 2. 使用Mybatis进行数据库的访问
 3. 使用spring进行bean的管理
 
@@ -245,3 +245,7 @@
 ## <Version	1.6.3>	2021年7月13日23:01:08
 
 > 1. 项目部署时不再需要配置网址URL信息
+
+## <Version	2.0.0>	2021年7月14日16:31:16
+
+> 1. 全面弃用Struts，改用Spring MVC框架

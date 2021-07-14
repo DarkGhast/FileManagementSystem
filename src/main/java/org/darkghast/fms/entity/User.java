@@ -1,10 +1,6 @@
 package org.darkghast.fms.entity;
 
-<<<<<<< Updated upstream
-import org.apache.struts2.json.annotations.JSON;
-=======
 import com.alibaba.fastjson.annotation.JSONField;
->>>>>>> Stashed changes
 
 public class User {
     /**
@@ -76,11 +72,7 @@ public class User {
         this.username = username;
     }
 
-<<<<<<< Updated upstream
-    @JSON(serialize = false)
-=======
     @JSONField(serialize = false)
->>>>>>> Stashed changes
     public String getPassword() {
         return password;
     }
