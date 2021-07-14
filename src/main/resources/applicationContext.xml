@@ -44,6 +44,7 @@
 
     <bean id="savedFileService" class="org.darkghast.fms.service.impl.SavedFileServiceImpl"/>
     <bean id="userService" class="org.darkghast.fms.service.impl.UserServiceImpl"/>
+<<<<<<< Updated upstream
     <bean id="downloadAction" class="org.darkghast.fms.action.DownLoadAction" scope="prototype">
         <property name="savedFileService" ref="savedFileService"/>
     </bean>
@@ -58,6 +59,11 @@
         <property name="savedFileService" ref="savedFileService"/>
     </bean>
     <bean id="userLoginAction" class="org.darkghast.fms.action.UserLoginAction" scope="prototype">
+=======
+
+
+    <bean id="userController" class="org.darkghast.fms.controller.UserManagementController" scope="prototype">
+>>>>>>> Stashed changes
         <property name="userService" ref="userService"/>
     </bean>
 </beans>

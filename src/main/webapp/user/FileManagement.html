@@ -573,7 +573,8 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (errorList) {
+                success: function (data) {
+                    var errorList=data.errorList
                     if (errorList.length === 0) {
                         //如果没有上传错误的文件
                         var value = 0;

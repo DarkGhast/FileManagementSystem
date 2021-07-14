@@ -145,12 +145,30 @@ public class SavedFileUtils {
     }
 
     /**
+     * 获取文件的大小
+     * @param data 输入的文件byte流
+     * @return 文件的大小
+     */
+    public static long getSize(byte[] data){
+        return data.length;
+    }
+
+    /**
      * 计算出文件的识别码
      * @param file 输入的文件
      * @return 文件的识别码
      */
     public static String getIdentifier(File file) throws IOException {
         return getMD5(file)+"-"+getSHA1(file)+"-"+getSize(file);
+    }
+
+    /**
+     * 计算出文件的识别码
+     * @param data 输入的文件的Byte流
+     * @return 文件的识别码
+     */
+    public static String getIdentifier(byte[] data) throws IOException {
+        return getMD5(data)+"-"+getSHA1(data)+"-"+getSize(data);
     }
 
     /**
