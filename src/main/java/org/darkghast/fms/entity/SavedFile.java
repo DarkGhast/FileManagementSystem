@@ -1,6 +1,6 @@
 package org.darkghast.fms.entity;
 
-import org.apache.struts2.json.annotations.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 import org.darkghast.fms.utils.SavedFileUtils;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class SavedFile {
      *
      * @return 文件保存的完整路径
      */
-    @JSON(serialize = false)
+    @JSONField(serialize = false)
     public String getCompletePath() {
         return SavedFileUtils.getRootPath() + File.separator + path + File.separator + savedFileName;
     }
@@ -55,7 +55,8 @@ public class SavedFile {
      *
      * @return 文件保存的完整路径
      */
-    @JSON(serialize = false)
+
+    @JSONField(serialize = false)
     public String getSavePath() {
         return SavedFileUtils.getRootPath() + File.separator + path;
     }
@@ -102,7 +103,8 @@ public class SavedFile {
         this.id = id;
     }
 
-    @JSON(serialize = false)
+
+    @JSONField(serialize = false)
     public String getPath() {
         return path;
     }
@@ -119,7 +121,7 @@ public class SavedFile {
         this.realFileName = realFileName;
     }
 
-    @JSON(serialize = false)
+    @JSONField(serialize = false)
     public String getSavedFileName() {
         return savedFileName;
     }
@@ -144,7 +146,7 @@ public class SavedFile {
         this.uploader = uploader;
     }
 
-    @JSON(serialize = false)
+    @JSONField(serialize = false)
     public String getIdentifier() {
         return identifier;
     }

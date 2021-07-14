@@ -29,29 +29,6 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
-
-        <!--struts框架 start-->
-        <!-- https://mvnrepository.com/artifact/org.apache.struts/struts2-core -->
-        <!--Struts核心-->
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-core</artifactId>
-            <version>${struts.version}</version>
-        </dependency>
-        <!--Struts返回JSON的插件-->
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-json-plugin</artifactId>
-            <version>${struts.version}</version>
-        </dependency>
-        <!--Struts整合spring的插件-->
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-spring-plugin</artifactId>
-            <version>${struts.version}</version>
-        </dependency>
-        <!--struts end-->
-
         <!--spring框架 start-->
         <!--spring核心-->
         <dependency>
@@ -119,7 +96,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.5.5</version>
+            <version>3.5.6</version>
         </dependency>
         <!--Mybatis与spring整合所需-->
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
@@ -174,6 +151,31 @@
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
+
+        <!--上传文件-->
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+
+
+        <!--用于转换JSON-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.76</version>
+        </dependency>
+
 
         <!--Servlet-api-->
         <dependency>

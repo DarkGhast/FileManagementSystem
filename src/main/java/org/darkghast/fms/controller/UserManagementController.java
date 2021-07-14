@@ -1,8 +1,6 @@
-package org.darkghast.fms.action;
+package org.darkghast.fms.controller;
 
-import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.darkghast.fms.entity.SavedFile;
 import org.darkghast.fms.entity.User;
 import org.darkghast.fms.service.FileDeleteService;
@@ -10,62 +8,65 @@ import org.darkghast.fms.service.SavedFileService;
 import org.darkghast.fms.service.UserService;
 import org.darkghast.fms.service.impl.FileDeleteServiceImpl;
 import org.darkghast.fms.utils.PageQueryUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class UserAction extends ActionSupport{
+@Controller
+@RequestMapping(value = "UserManagement", name = "用户管理相关Controller")
+public class UserManagementController {
     /**
      * 用于记录日志信息
      */
-    static final Logger log = Logger.getLogger(UserAction.class.getName());
+    static final Logger log = Logger.getLogger(UserManagementController.class.getName());
     /**
      * 用于调用UserService
      */
-    UserService userService;
+    private UserService userService;
     /**
      * 用于调用SavedFileService
      */
     SavedFileService savedFileService;
 
     /**
-     * 返回前端的页的总数
-     */
-    private Long count;
-    /**
-     * 查询到的用户列表，方便Struts框架返回JSON数据
-     */
-    private List<User> userList = new ArrayList<>();
-
-    /**
      * 查询所有用户信息并返回给前端
      */
-    public String queryAll(){
-        userList = userService.queryAll();
-        return SUCCESS;
+    @RequestMapping(value = "queryAll",name = "查询所有用户信息并返回给前端")
+    @ResponseBody
+    public List<User> queryAll(){
+        return userService.queryAll();
     }
 
     /**
      * 分页查询所有用户信息并返回给前端
      */
-    public String queryByPage() {
-        HttpServletRequest request = ServletActionContext.getRequest();
+    @RequestMapping(value = "queryByPage",name = "分页查询所有用户信息并返回给前端")
+    @ResponseBody
+    public Map<String,Object> queryByPage(HttpServletRequest request) {
+        Map<String,Object> result = new HashMap<>();
         int pageNo = Integer.parseInt(request.getParameter("pageNo").trim());
 
-        count=(userService.getCount()+PageQueryUtil.PAGE_SIZE-1)/PageQueryUtil.PAGE_SIZE;
-        userList = userService.queryByPage(pageNo, PageQueryUtil.PAGE_SIZE);
-        return SUCCESS;
+        result.put("count", (userService.getCount()+ PageQueryUtil.PAGE_SIZE-1) /PageQueryUtil.PAGE_SIZE);
+        result.put("userList",userService.queryByPage(pageNo, PageQueryUtil.PAGE_SIZE));
+        return result;
     }
 
     /**
      * 按条件分页查询用户信息并返回给前端
      */
-    public String queryByPageForCondition(){
-        HttpServletRequest request = ServletActionContext.getRequest();
+    @RequestMapping(value = "queryByPageForCondition",name = "按条件分页查询用户信息并返回给前端")
+    @ResponseBody
+    public Map<String,Object> queryByPageForCondition(HttpServletRequest request){
+        Map<String,Object> result = new HashMap<>();
         User user=new User();
         Integer id=null;
         String email=null,username="";
@@ -84,18 +85,21 @@ public class UserAction extends ActionSupport{
         user.setEmail(email);
         user.setUsername("%"+username+"%");
 
-        count=(userService.getCountForCondition(user)+PageQueryUtil.PAGE_SIZE-1)/PageQueryUtil.PAGE_SIZE;
-        userList = userService.queryByPageForCondition(user,pageNo, PageQueryUtil.PAGE_SIZE);
-        return SUCCESS;
+
+        result.put
+                ("count", (userService.getCountForCondition(user)+PageQueryUtil.PAGE_SIZE-1) /PageQueryUtil.PAGE_SIZE);
+        result.put
+                ("userList",userService.queryByPageForCondition(user,pageNo, PageQueryUtil.PAGE_SIZE));
+        return result;
     }
 
     /**
      * 接收前端传来的id，若数据库中没有用户上传的文件，则将数据库中的对应的用户删除
      * 否则返回-100，表示用户仍有文件在数据库中，不允许用该方法删除
      */
-    public void delete() throws IOException {
-        HttpServletRequest request = ServletActionContext.getRequest();
-        HttpServletResponse response = ServletActionContext.getResponse();
+    @RequestMapping(value = "delete",name = "删除用户")
+    @ResponseBody
+    public void delete(HttpServletRequest request,HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id").trim());
 
         List<SavedFile> savedFileList = savedFileService.queryAllByUploaderId(id);
@@ -114,10 +118,10 @@ public class UserAction extends ActionSupport{
     /**
      * 接收前端传来的id，不经过校验，直接强制删除用户
      */
-    public void forceDelete() throws IOException {
+    @RequestMapping(value = "forceDelete",name = "强制删除用户")
+    @ResponseBody
+    public int forceDelete(HttpServletRequest request) throws IOException {
         FileDeleteService fileDeleteService=new FileDeleteServiceImpl();
-        HttpServletRequest request = ServletActionContext.getRequest();
-        HttpServletResponse response = ServletActionContext.getResponse();
         int id = Integer.parseInt(request.getParameter("id").trim());
 
         List<SavedFile> savedFiles = savedFileService.queryAllByUploaderId(id);
@@ -148,65 +152,58 @@ public class UserAction extends ActionSupport{
         }
         if(deleteFlag){
             int result = userService.delete(id);
-            response.getWriter().print(result);
             if (result == 1) {
                 User user = (User) request.getSession().getAttribute("user");
                 log.info("用户ID-"+user.getId()+"-删除了用户-"+id);
             }
+            return result;
         }else{
-            response.getWriter().print(-200);
+            return -200;
         }
     }
 
     /**
      * 接收前端传来的用户名和密码，在数据库中新增用户
      */
-    public void insertUser() throws IOException {
-        HttpServletRequest request = ServletActionContext.getRequest();
-        HttpServletResponse response = ServletActionContext.getResponse();
+    @RequestMapping(value = "insertUser",name = "强制删除用户")
+    @ResponseBody
+    public int insertUser(HttpServletRequest request) {
         String email = request.getParameter("email").trim();
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
         int result = userService.register(new User(null, email, username, password));
-        response.getWriter().print(result);
         if (result == 1) {
             User user = (User) request.getSession().getAttribute("user");
             log.info("用户ID-"+user.getId()+"-新增了用户-"+email);
         }
+        return result;
     }
 
     /**
      * 接收前端传来的id以及修改后的用户名和密码，将数据库中的对应的用户进行修改
      */
-    public void updateUser() throws IOException {
-        HttpServletRequest request = ServletActionContext.getRequest();
-        HttpServletResponse response = ServletActionContext.getResponse();
+    @RequestMapping(value = "updateUser",name = "强制删除用户")
+    @ResponseBody
+    public int updateUser(HttpServletRequest request){
         int id = Integer.parseInt(request.getParameter("id").trim());
         String email = request.getParameter("email").trim();
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
         int result = userService.update(new User(id, email, username, password));
-        response.getWriter().print(result);
         if (result == 1) {
             User user = (User) request.getSession().getAttribute("user");
             log.info("用户ID-"+user.getId()+"-修改了用户-"+id+"的密码");
         }
+        return result;
     }
 
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
+    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    @Autowired
     public void setSavedFileService(SavedFileService savedFileService) {
         this.savedFileService = savedFileService;
-    }
-
-    public Long getCount() {
-        return count;
     }
 }
