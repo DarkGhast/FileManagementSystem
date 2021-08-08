@@ -12,8 +12,6 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-<<<<<<< Updated upstream
-=======
     <!--注解驱动-->
     <mvc:annotation-driven>
         <!--配置@ResponseBody由fastjson解析 -->
@@ -58,7 +56,7 @@
             </list>
         </constructor-arg>
     </bean>
->>>>>>> Stashed changes
+
     <!-- 使用扫描机制扫描包 -->
     <context:component-scan base-package="org.darkghast.fms" />
 
